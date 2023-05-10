@@ -1,5 +1,5 @@
 import { Octokit } from 'octokit';
-import { TOKEN } from '../../config';
+import { TOKEN } from 'config.js';
 
 const octokit = new Octokit({
   auth: TOKEN,
