@@ -1,0 +1,17 @@
+.containerToDo {
+  display: inline-block;
+  background-color: #bdbdbd;
+  border-radius: 10px;
+  margin-left: 120px;
+  margin-top: 80px;
+}
+
+.list {
+  padding: 20px;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  margin-top: 18px;
+}

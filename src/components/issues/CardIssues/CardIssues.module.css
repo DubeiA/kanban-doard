@@ -1,0 +1,27 @@
+.card {
+  width: 18rem;
+  background-color: aliceblue;
+  border-radius: 5px;
+}
+
+.title {
+  font-weight: 600;
+  padding: 15px;
+  text-align: center;
+}
+
+.text {
+  text-align: center;
+  color: #7e7e7e;
+}
+
+.possition {
+  display: flex;
+  /* flex-direction: row; */
+  justify-content: center;
+  align-items: center;
+}
+
+.cardLinkUser {
+  margin-right: 20px;
+}

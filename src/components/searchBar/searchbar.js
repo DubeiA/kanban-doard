@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { fetchIssues } from '../api/fetchIssues';
 import css from './searchbar.module.css';
 import Button from 'react-bootstrap/Button';
-import { IssuesList } from '../issues/IssuesList';
+import { IssuesToDo } from '../issues/IssuesToDo/IssuesToDo';
 
 export const SearchBar = () => {
-  const [searchName, setSearchName] = useState('');
+  const [searchName, setSearchName] = useState(
+    'https://github.com/facebook/react'
+  );
   const [allIssues, setAllIssues] = useState();
   const [isLoading, setLoading] = useState(false);
 
@@ -61,7 +63,7 @@ export const SearchBar = () => {
           {isLoading ? 'Loading…' : 'Click to load'}
         </Button>
       </div>
-      <IssuesList data={allIssues} />
+      <IssuesToDo data={allIssues} />
     </>
   );
 };
