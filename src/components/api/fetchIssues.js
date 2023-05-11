@@ -2,7 +2,7 @@ import { Octokit } from 'octokit';
 import { TOKEN } from 'config.js';
 
 const octokit = new Octokit({
-  auth: TOKEN,
+  auth: localStorage.getItem('accessToken'),
 });
 
 export const fetchIssues = async (owner, repo) => {

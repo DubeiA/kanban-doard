@@ -1,5 +1,5 @@
 .containerToDo {
-  display: inline-block;
+  display: inline-flex;
   background-color: #bdbdbd;
   border-radius: 10px;
   margin-left: 120px;
@@ -7,11 +7,13 @@
 }
 
 .list {
-  padding: 20px;
-  margin: 0;
+  padding: 0;
+  margin: 0, auto;
   list-style: none;
 }
 
 .item {
   margin-top: 18px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
