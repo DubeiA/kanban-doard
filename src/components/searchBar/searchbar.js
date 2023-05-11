@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { fetchIssues } from '../api/fetchIssues';
 import css from './searchbar.module.css';
 import Button from 'react-bootstrap/Button';
+import { IssuesList } from '../issues/IssuesList';
 
 export const SearchBar = () => {
   const [searchName, setSearchName] = useState('');
+  const [allIssues, setAllIssues] = useState();
   const [isLoading, setLoading] = useState(false);
 
   function simulateNetworkRequest() {
@@ -26,35 +28,40 @@ export const SearchBar = () => {
   const regex = /https:\/\/github.com\/(.+)\/(.+)/;
   const match = searchName.match(regex);
 
-  const loadUrl = () => {
+  const loadUrl = async () => {
     if (match) {
-      fetchIssues(match[1], match[2]);
-      setSearchName('');
-      setLoading(true);
+      const data = await fetchIssues(match[1], match[2]);
+
+      await setAllIssues(data);
+      await setSearchName('');
+      await setLoading(true);
       return;
     }
     alert('enter url');
   };
 
   return (
-    <div className={css.searchContainer}>
-      <input
-        className={css.searchBar}
-        type="text"
-        autoComplete="off"
-        autoFocus
-        placeholder="Search images and photos"
-        value={searchName}
-        onChange={handleNameChange}
-      />
-      <Button
-        className={css.searchBtn}
-        variant="primary"
-        disabled={isLoading}
-        onClick={loadUrl}
-      >
-        {isLoading ? 'Loading…' : 'Click to load'}
-      </Button>
-    </div>
+    <>
+      <div className={css.searchContainer}>
+        <input
+          className={css.searchBar}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          value={searchName}
+          onChange={handleNameChange}
+        />
+        <Button
+          className={css.searchBtn}
+          variant="primary"
+          disabled={isLoading}
+          onClick={loadUrl}
+        >
+          {isLoading ? 'Loading…' : 'Click to load'}
+        </Button>
+      </div>
+      <IssuesList data={allIssues} />
+    </>
   );
 };
