@@ -3,16 +3,15 @@
   flex-direction: column;
   background-color: #bdbdbd;
   border-radius: 10px;
-
+  margin-bottom: 40px;
   margin-top: 80px;
   width: 328px;
   height: 80%;
-  margin-bottom: 40px;
 }
 
 .list {
   padding: 0;
-  margin: 0;
+  margin: 0, auto;
   list-style: none;
 }
 
@@ -25,15 +24,4 @@
 .title {
   text-align: center;
   margin: 0;
-}
-
-.btnLoad {
-  margin: 10px;
-  border-radius: 5px;
-  border-style: hidden;
-  background-color: greenyellow;
-}
-
-.btnLoad:hover {
-  background-color: cadetblue;
 }

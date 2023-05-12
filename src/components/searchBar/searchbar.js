@@ -1,72 +1,54 @@
 import { useState, useEffect } from 'react';
-import { fetchIssues } from '../api/fetchIssues';
+import { fetchIssues } from '../../api/fetchIssues';
 import css from './searchbar.module.css';
 import Button from 'react-bootstrap/Button';
 import { IssuesToDo } from '../issues/IssuesToDo/IssuesToDo';
+import { IssuesProgres } from '../issues/IssuesProgress/IssuesProgress';
+import { IssuesDone } from '../issues/IssuesDone/IssuesDone';
 
-const CLIENT_ID = '5b578c8c0d177a310fe7';
+import { Auth } from '../auth/auth';
 
 export const SearchBar = () => {
-  const [searchName, setSearchName] = useState(
-    'https://github.com/facebook/react'
-  );
+  const [searchName, setSearchName] = useState('');
   const [allIssues, setAllIssues] = useState();
   const [isLoading, setLoading] = useState(false);
   const [rerender, setRerender] = useState(false);
-  // const [userData, setUserData] = useState({});
-  // console.log('userData', userData);
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const codeParams = urlParams.get('code');
 
-    if (codeParams && localStorage.getItem('accessToken') === null) {
-      async function getAccessToken() {
-        await fetch('http://localhost:4000/getAccessToken?code=' + codeParams, {
-          method: 'GET',
-        })
-          .then(response => {
-            return response.json();
-          })
-          .then(data => {
-            if (data.access_token) {
-              localStorage.setItem('accessToken', data.access_token);
-              setRerender(!rerender);
-            }
-          });
-      }
-      getAccessToken();
-    }
-  }, [rerender]);
+  const [userLogin, setUserLogin] = useState('');
+  const [userRepo, setUserRepo] = useState('');
 
-  // async function getUserData() {
-  //   await fetch('http://localhost:4000/getUserData', {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-  //     },
-  //   })
-  //     .then(response => {
-  //       return response.json();
-  //     })
-  //     .then(data => {
-  //       console.log('GET Search USER', data);
-  //       setUserData(data);
-  //     })
-  //     .catch(error => console.log(error));
+  const regex = /https:\/\/github.com\/(.+)\/(.+)/;
+  const match = searchName.match(regex);
+
+  // useEffect(() => {
+  //   const queryString = window.location.search;
+  //   const urlParams = new URLSearchParams(queryString);
+  //   const codeParams = urlParams.get('code');
+
+  //   if (codeParams && localStorage.getItem('accessToken') === null) {
+  //     async function getAccessToken() {
+  //       await fetch('http://localhost:4000/getAccessToken?code=' + codeParams, {
+  //         method: 'GET',
+  //       })
+  //         .then(response => {
+  //           return response.json();
+  //         })
+  //         .then(data => {
+  //           if (data.access_token) {
+  //             localStorage.setItem('accessToken', data.access_token);
+  //             setRerender(!rerender);
+  //           }
+  //         });
+  //     }
+  //     getAccessToken();
+  //   }
+  // }, [rerender]);
+
+  // function loginWithGitHub() {
+  //   window.location.assign(
+  //     'http://github.com/login/oauth/authorize?client_id=' + CLIENT_ID
+  //   );
   // }
-
-  // console.log('userData', userData);
-
-  function loginWithGitHub() {
-    window.location.assign(
-      'http://github.com/login/oauth/authorize?client_id=' + CLIENT_ID
-    );
-  }
-
-  const handleNameChange = event => {
-    setSearchName(event.currentTarget.value);
-  };
 
   function simulateNetworkRequest() {
     return new Promise(resolve => setTimeout(resolve, 1000));
@@ -80,8 +62,9 @@ export const SearchBar = () => {
     }
   }, [isLoading]);
 
-  const regex = /https:\/\/github.com\/(.+)\/(.+)/;
-  const match = searchName.match(regex);
+  const handleNameChange = event => {
+    setSearchName(event.currentTarget.value);
+  };
 
   const loadUrl = async () => {
     if (match) {
@@ -90,6 +73,8 @@ export const SearchBar = () => {
       await setAllIssues(data);
       await setSearchName('');
       await setLoading(true);
+      await setUserLogin(match[1]);
+      await setUserRepo(match[2]);
       return;
     }
     alert('enter url');
@@ -107,6 +92,7 @@ export const SearchBar = () => {
           >
             LogOut
           </button>
+          <p>https://github.com/facebook/react</p>
 
           <div className={css.searchContainer}>
             <input
@@ -127,13 +113,21 @@ export const SearchBar = () => {
               {isLoading ? 'Loading…' : 'Click to load'}
             </Button>
           </div>
-          <IssuesToDo data={allIssues} />
+          {allIssues && (
+            <div className={css.containerIssues}>
+              <IssuesToDo
+                data={allIssues}
+                load={setAllIssues}
+                searchLogin={userLogin}
+                searchRepo={userRepo}
+              />
+              <IssuesProgres data={allIssues} />
+              <IssuesDone data={allIssues} />
+            </div>
+          )}
         </>
       ) : (
-        <div>
-          <button onClick={loginWithGitHub}>LogIn</button>
-          <h1>You have to Log In</h1>
-        </div>
+        <Auth />
       )}
     </>
   );

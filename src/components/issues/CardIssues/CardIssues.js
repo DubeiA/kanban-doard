@@ -24,11 +24,6 @@ function CardIssues({ data }) {
     return timeAgo;
   };
 
-  console.log(processDate());
-
-  // const time = () => {
-  //     data
-  // }
   return (
     <Card className={css.card}>
       <Card.Body>

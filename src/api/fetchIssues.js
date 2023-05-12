@@ -1,15 +1,17 @@
 import { Octokit } from 'octokit';
-import { TOKEN } from 'config.js';
+// import { TOKEN } from 'config.js';
 
 const octokit = new Octokit({
   auth: localStorage.getItem('accessToken'),
 });
 
-export const fetchIssues = async (owner, repo) => {
+export const fetchIssues = async (owner, repo, page) => {
+  console.log(owner, repo, page);
   try {
     const issues = await octokit.request('GET /repos/{owner}/{repo}/issues', {
       owner,
       repo,
+      page,
       per_page: 5,
     });
 
