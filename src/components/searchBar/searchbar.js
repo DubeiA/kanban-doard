@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
-import { fetchIssues } from '../../api/fetchIssues';
+import { Auth } from '../auth/auth';
 import css from './searchbar.module.css';
 import Button from 'react-bootstrap/Button';
-import { IssuesToDo } from '../issues/IssuesToDo/IssuesToDo';
-import { IssuesProgres } from '../issues/IssuesProgress/IssuesProgress';
-import { IssuesDone } from '../issues/IssuesDone/IssuesDone';
-
-import { Auth } from '../auth/auth';
+import { fetchIssues } from '../../api/fetchIssues';
+import { ListIssues } from '../ListIssues/ListIssues';
 
 export const SearchBar = () => {
   const [searchName, setSearchName] = useState('');
@@ -20,38 +17,8 @@ export const SearchBar = () => {
   const regex = /https:\/\/github.com\/(.+)\/(.+)/;
   const match = searchName.match(regex);
 
-  // useEffect(() => {
-  //   const queryString = window.location.search;
-  //   const urlParams = new URLSearchParams(queryString);
-  //   const codeParams = urlParams.get('code');
-
-  //   if (codeParams && localStorage.getItem('accessToken') === null) {
-  //     async function getAccessToken() {
-  //       await fetch('http://localhost:4000/getAccessToken?code=' + codeParams, {
-  //         method: 'GET',
-  //       })
-  //         .then(response => {
-  //           return response.json();
-  //         })
-  //         .then(data => {
-  //           if (data.access_token) {
-  //             localStorage.setItem('accessToken', data.access_token);
-  //             setRerender(!rerender);
-  //           }
-  //         });
-  //     }
-  //     getAccessToken();
-  //   }
-  // }, [rerender]);
-
-  // function loginWithGitHub() {
-  //   window.location.assign(
-  //     'http://github.com/login/oauth/authorize?client_id=' + CLIENT_ID
-  //   );
-  // }
-
   function simulateNetworkRequest() {
-    return new Promise(resolve => setTimeout(resolve, 1000));
+    return new Promise(resolve => setTimeout(resolve, 750));
   }
 
   useEffect(() => {
@@ -114,16 +81,12 @@ export const SearchBar = () => {
             </Button>
           </div>
           {allIssues && (
-            <div className={css.containerIssues}>
-              <IssuesToDo
-                data={allIssues}
-                load={setAllIssues}
-                searchLogin={userLogin}
-                searchRepo={userRepo}
-              />
-              <IssuesProgres data={allIssues} />
-              <IssuesDone data={allIssues} />
-            </div>
+            <ListIssues
+              allIssues={allIssues}
+              setAllIssues={setAllIssues}
+              userLogin={userLogin}
+              userRepo={userRepo}
+            />
           )}
         </>
       ) : (

@@ -29,8 +29,3 @@
 .searchBtn:hover {
   background-color: bisque;
 }
-
-.containerIssues {
-  display: flex;
-  justify-content: space-around;
-}
