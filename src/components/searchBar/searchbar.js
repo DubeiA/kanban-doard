@@ -2,23 +2,25 @@ import { useState, useEffect } from 'react';
 import { Auth } from '../auth/auth';
 import css from './searchbar.module.css';
 import Button from 'react-bootstrap/Button';
-import { fetchIssues } from '../../api/fetchIssues';
+import { fetchIssues } from '../../redux/issuesOperation';
 import { ListIssues } from '../ListIssues/ListIssues';
+import { getAllIssues, getUserRepo } from '../../redux/selectors';
+import { SearchRepo } from '../../redux/issuesReducer';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 export const SearchBar = () => {
-  const [searchName, setSearchName] = useState('');
-  const [allIssues, setAllIssues] = useState();
+  const [inputValue, setInputValue] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [rerender, setRerender] = useState(false);
 
-  const [userLogin, setUserLogin] = useState('');
-  const [userRepo, setUserRepo] = useState('');
+  const allIssues = useSelector(getAllIssues);
+  const userURL = useSelector(getUserRepo);
 
-  const regex = /https:\/\/github.com\/(.+)\/(.+)/;
-  const match = searchName.match(regex);
+  const dispatch = useDispatch();
 
   function simulateNetworkRequest() {
-    return new Promise(resolve => setTimeout(resolve, 750));
+    return new Promise(resolve => setTimeout(resolve, 500));
   }
 
   useEffect(() => {
@@ -30,21 +32,34 @@ export const SearchBar = () => {
   }, [isLoading]);
 
   const handleNameChange = event => {
-    setSearchName(event.currentTarget.value);
+    const regex = /https:\/\/github.com\/(.+)\/(.+)/;
+    const match = event.currentTarget.value.match(regex);
+    try {
+      const owner = match ? match[1] : null;
+      const repo = match ? match[2] : null;
+      const combintMatch = [owner, repo];
+
+      dispatch(SearchRepo(combintMatch));
+      setInputValue(event.currentTarget.value);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const loadUrl = async () => {
-    if (match) {
-      const data = await fetchIssues(match[1], match[2]);
+  const loadUrl = () => {
+    if (userURL) {
+      const owner = userURL[0];
+      const repo = userURL[1];
+      const page = 1;
+      dispatch(fetchIssues({ owner, repo, page }));
 
-      await setAllIssues(data);
-      await setSearchName('');
-      await setLoading(true);
-      await setUserLogin(match[1]);
-      await setUserRepo(match[2]);
+      setLoading(true);
+
+      setInputValue('');
+
       return;
     }
-    alert('enter url');
+    alert('incorect url');
   };
 
   return (
@@ -68,7 +83,8 @@ export const SearchBar = () => {
               autoComplete="off"
               autoFocus
               placeholder="Search images and photos"
-              value={searchName}
+              name="repo"
+              value={inputValue}
               onChange={handleNameChange}
             />
             <Button
@@ -80,14 +96,7 @@ export const SearchBar = () => {
               {isLoading ? 'Loading…' : 'Click to load'}
             </Button>
           </div>
-          {allIssues && (
-            <ListIssues
-              allIssues={allIssues}
-              setAllIssues={setAllIssues}
-              userLogin={userLogin}
-              userRepo={userRepo}
-            />
-          )}
+          {allIssues.length >= 1 && <ListIssues />}
         </>
       ) : (
         <Auth />

@@ -1,24 +1,27 @@
-import { Octokit } from 'octokit';
-// import { TOKEN } from 'config.js';
+// import { Octokit } from 'octokit';
+// import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const octokit = new Octokit({
-  auth: localStorage.getItem('accessToken'),
-});
+// const octokit = new Octokit({
+//   auth: localStorage.getItem('accessToken'),
+// });
 
-export const fetchIssues = async (owner, repo, page) => {
-  console.log(owner, repo, page);
-  try {
-    const issues = await octokit.request('GET /repos/{owner}/{repo}/issues', {
-      owner,
-      repo,
-      page,
-      per_page: 5,
-    });
+// export const fetchIssues = createAsyncThunk(
+//   'issues/fetchAll',
+//   async ({ owner, repo, page }, { rejectWithValue }) => {
+//     try {
+//       const response = await octokit.request(
+//         'GET /repos/{owner}/{repo}/issues',
+//         {
+//           owner,
+//           repo,
+//           page,
+//           per_page: 5,
+//         }
+//       );
 
-    const data = issues.data.map(sta => sta);
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );

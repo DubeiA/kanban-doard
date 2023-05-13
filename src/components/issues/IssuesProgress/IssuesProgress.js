@@ -6,7 +6,7 @@ import css from './IssuesProgres.module.css';
 export const IssuesProgres = ({ data }) => {
   const [progress, setProgress] = useState([]);
   //   const filterIssues = data.filter(d => d.assignee);
-  console.log(progress.length);
+  // console.log(progress.length);
 
   useEffect(() => {
     if (!data) {

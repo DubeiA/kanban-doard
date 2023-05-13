@@ -3,16 +3,30 @@ import { IssuesProgres } from '../issues/IssuesProgress/IssuesProgress';
 import { IssuesDone } from '../issues/IssuesDone/IssuesDone';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 
 import css from './ListIssues.module.css';
+import { useSelector } from 'react-redux';
+import { getAllIssues } from '../../redux/selectors';
 
-export const ListIssues = ({
-  allIssues,
-  setAllIssues,
-  userLogin,
-  userRepo,
-}) => {
+export const ListIssues = () => {
+  const allIssues = useSelector(getAllIssues);
+  // console.log(setAllIssues(allIssues));
+
+  const [dragDrop, setDragDrop] = useState(allIssues);
+  const issueID = allIssues.map(iId => iId.id);
+  const dragId = dragDrop.map(iId => iId.id);
+  useEffect(() => {
+    const sortedArr1 = issueID.slice().sort();
+    const sortedArr2 = dragId.slice().sort();
+
+    if (!sortedArr1.every((value, index) => value === sortedArr2[index])) {
+      return setDragDrop(allIssues);
+    }
+
+    // setDragDrop(dragDrop);
+  }, [allIssues, dragDrop, dragId, issueID]);
+
   const DroppableIssuesToDo = forwardRef((props, ref) => (
     <IssuesToDo {...props} forwardedRef={ref} />
   ));
@@ -25,7 +39,6 @@ export const ListIssues = ({
     <IssuesDone {...props} forwardedRef={ref} />
   ));
   const handleDragEnd = result => {
-    console.log('hi');
     const { source, destination } = result;
 
     // Перевірка, чи є призначення для перетягуваного елемента
@@ -33,32 +46,11 @@ export const ListIssues = ({
       return;
     }
 
-    // Отримання даних з елементів джерела і призначення
-    const sourceDroppableId = source.droppableId;
-    const sourceIndex = source.index;
-    const destinationDroppableId = destination.droppableId;
-    const destinationIndex = destination.index;
+    const items = Array.from(dragDrop);
+    const [reorderItem] = items.splice(source.index, 1);
+    items.splice(destination.index, 0, reorderItem);
 
-    if (!allIssues[sourceDroppableId] || !allIssues[destinationDroppableId]) {
-      return;
-    }
-
-    // Отримання даних зі стану компонентів
-    const sourceColumnData = [...allIssues[sourceDroppableId]];
-    const destinationColumnData = [...allIssues[destinationDroppableId]];
-
-    // Копіювання елемента з елементів джерела
-    const [draggedItem] = sourceColumnData.splice(sourceIndex, 1);
-
-    // Вставка елемента у призначення
-    destinationColumnData.splice(destinationIndex, 0, draggedItem);
-
-    // Оновлення стану компонентів
-    setAllIssues({
-      ...allIssues,
-      [sourceDroppableId]: sourceColumnData,
-      [destinationDroppableId]: destinationColumnData,
-    });
+    setDragDrop(items);
   };
   return (
     <div className={css.containerIssues}>
@@ -66,15 +58,8 @@ export const ListIssues = ({
         <Droppable droppableId="column-1" key={'column1'}>
           {(provided, snapshot) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              <DroppableIssuesToDo
-                // {...provided.droppableProps}
-                // ref={provided.innerRef}
-                isDraggingOver={snapshot.isDraggingOver}
-                data={allIssues}
-                load={setAllIssues}
-                searchLogin={userLogin}
-                searchRepo={userRepo}
-              />
+              <DroppableIssuesToDo isDraggingOver={snapshot.isDraggingOver} />
+              {provided.placeholder}
             </div>
           )}
         </Droppable>
@@ -82,23 +67,17 @@ export const ListIssues = ({
           {(provided, snapshot) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               <DroppableIssuesProgress
-                // {...provided.droppableProps}
-                // ref={provided.innerRef}
                 isDraggingOver={snapshot.isDraggingOver}
-                data={allIssues}
               />
+              {provided.placeholder}
             </div>
           )}
         </Droppable>
         <Droppable droppableId="column-3" key={'column3'}>
           {(provided, snapshot) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              <DroppableIssuesDone
-                // {...provided.droppableProps}
-                // ref={provided.innerRef}
-                isDraggingOver={snapshot.isDraggingOver}
-                data={allIssues}
-              />
+              <DroppableIssuesDone isDraggingOver={snapshot.isDraggingOver} />
+              {provided.placeholder}
             </div>
           )}
         </Droppable>

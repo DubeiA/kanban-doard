@@ -1,22 +1,28 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 
 import CardIssues from '../CardIssues/CardIssues';
 import css from './IssuesToDo.module.css';
-import { fetchIssues } from '../../../api/fetchIssues';
+import { fetchIssues } from '../../../redux/issuesOperation';
 import { Draggable } from 'react-beautiful-dnd';
 
-export const IssuesToDo = ({ data, load, searchLogin, searchRepo }) => {
-  // console.log(data.filter(d => d.assignee));
-  const [page, setPage] = useState(2);
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllIssues, getUserRepo } from '../../../redux/selectors';
+import { increment } from '../../../redux/issuesReducer';
+
+export const IssuesToDo = () => {
+  const allIssues = useSelector(getAllIssues);
+  const userURL = useSelector(getUserRepo);
+  const next = useSelector(state => state.issues.page);
+
+  const dispatch = useDispatch();
+  const owner = userURL[0];
+  const repo = userURL[1];
+
   const listRef = useRef(null);
 
-  const fetchNextPage = async () => {
-    const usersNext = await fetchIssues(searchLogin, searchRepo, page);
-
-    await load(usersNext);
-    await setPage(prevPage => prevPage + 1);
-    console.log(usersNext);
-    return usersNext;
+  const fetchNextPage = () => {
+    dispatch(increment());
+    dispatch(fetchIssues({ owner, repo, next }));
   };
 
   return (
@@ -24,8 +30,8 @@ export const IssuesToDo = ({ data, load, searchLogin, searchRepo }) => {
       <h2 className={css.title}>To Do</h2>
 
       <ul className={css.list} ref={listRef}>
-        {data &&
-          data.map((issue, index) => (
+        {allIssues &&
+          allIssues.map((issue, index) => (
             <Draggable
               key={String(issue.id)}
               draggableId={String(issue.id)}
