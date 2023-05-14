@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchIssues, fetchNextPageIssues } from './issuesOperation';
+import { fetchIssues } from './issuesOperation';
 
 const issuesReducer = createSlice({
   name: 'issues',
@@ -20,6 +20,9 @@ const issuesReducer = createSlice({
     increment: (state, action) => {
       state.page += 1;
     },
+    DragIssues: (state, action) => {
+      state.issues.allIssues = action.payload;
+    },
   },
   extraReducers: {
     // Fecth issues
@@ -34,50 +37,10 @@ const issuesReducer = createSlice({
       state.issues.isLoading = false;
       state.issues.error = payload;
     },
-    // next page
-    // [fetchNextPageIssues.pending]: state => {
-    //   state.issues.isLoading = true;
-    // },
-    // [fetchNextPageIssues.fulfilled]: (state, { payload }) => {
-    //   state.issues.allIssues = payload;
-    //   state.issues.isLoading = false;
-    // },
-    // [fetchNextPageIssues.rejected]: (state, { payload }) => {
-    //   state.issues.isLoading = false;
-    //   state.issues.error = payload;
-    // },
-    // // Add Contact
-    // [addContact.pending]: state => {
-    //   state.contacts.isLoading = true;
-    // },
-    // [addContact.fulfilled]: (state, { payload }) => {
-    //   state.contacts.entities.push(payload);
-    //   state.contacts.isLoading = false;
-    // },
-    // [addContact.rejected]: (state, { payload }) => {
-    //   state.contacts.isLoading = false;
-    //   state.contacts.error = payload;
-    // },
-    // // delete contact
-    // [deleteContact.pending]: state => {
-    //   state.contacts.isLoading = true;
-    // },
-    // [deleteContact.fulfilled]: (state, { payload }) => {
-    //   state.contacts.isLoading = false;
-    //   state.contacts.error = null;
-    //   const index = state.contacts.entities.findIndex(
-    //     contactID => contactID.id === payload.id
-    //   );
-    //   state.contacts.entities.splice(index, 1);
-    // },
-    // [deleteContact.rejected]: (state, { payload }) => {
-    //   state.contacts.isLoading = false;
-    //   state.contacts.error = payload;
-    // },
   },
 });
 
-export const { AddContact, DeleteContact, SearchRepo, increment } =
+export const { AddContact, DeleteContact, SearchRepo, increment, DragIssues } =
   issuesReducer.actions;
 
 export default issuesReducer.reducer;

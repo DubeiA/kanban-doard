@@ -8,6 +8,8 @@ import { forwardRef, useEffect, useState } from 'react';
 import css from './ListIssues.module.css';
 import { useSelector } from 'react-redux';
 import { getAllIssues } from '../../redux/selectors';
+import { DragIssues } from '../../redux/issuesReducer';
+import { useDispatch } from 'react-redux';
 
 export const ListIssues = () => {
   const allIssues = useSelector(getAllIssues);
@@ -16,6 +18,7 @@ export const ListIssues = () => {
   const [dragDrop, setDragDrop] = useState(allIssues);
   const issueID = allIssues.map(iId => iId.id);
   const dragId = dragDrop.map(iId => iId.id);
+  const dispatch = useDispatch();
   useEffect(() => {
     const sortedArr1 = issueID.slice().sort();
     const sortedArr2 = dragId.slice().sort();
@@ -24,7 +27,7 @@ export const ListIssues = () => {
       return setDragDrop(allIssues);
     }
 
-    // setDragDrop(dragDrop);
+    setDragDrop(dragDrop);
   }, [allIssues, dragDrop, dragId, issueID]);
 
   const DroppableIssuesToDo = forwardRef((props, ref) => (
@@ -46,11 +49,12 @@ export const ListIssues = () => {
       return;
     }
 
-    const items = Array.from(dragDrop);
+    const items = Array.from(allIssues);
     const [reorderItem] = items.splice(source.index, 1);
     items.splice(destination.index, 0, reorderItem);
 
-    setDragDrop(items);
+    dispatch(DragIssues(items));
+    // setDragDrop(items);
   };
   return (
     <div className={css.containerIssues}>

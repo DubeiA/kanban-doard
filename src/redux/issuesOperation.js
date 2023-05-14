@@ -28,27 +28,3 @@ export const fetchIssues = createAsyncThunk(
     }
   }
 );
-
-// export const fetchNextPageIssues = createAsyncThunk(
-//   'issues/fetchNextPage',
-//   async ({ owner, repo, next }, { rejectWithValue }) => {
-//     try {
-//       console.log(owner, repo, next);
-//       const response = await octokit.request(
-//         'GET /repos/{owner}/{repo}/issues',
-//         {
-//           owner,
-//           repo,
-//           page: next,
-//           per_page: 5,
-//         }
-//       );
-//       console.log(response.data);
-
-//       return response.data;
-//     } catch (error) {
-//       alert('incorect url, example -> https://github.com/owner/repo');
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
