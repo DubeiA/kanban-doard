@@ -3,7 +3,7 @@ import { IssuesProgres } from '../issues/IssuesProgress/IssuesProgress';
 import { IssuesDone } from '../issues/IssuesDone/IssuesDone';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef } from 'react';
 
 import css from './ListIssues.module.css';
 import { useSelector } from 'react-redux';
@@ -13,22 +13,23 @@ import { useDispatch } from 'react-redux';
 
 export const ListIssues = () => {
   const allIssues = useSelector(getAllIssues);
+  const dispatch = useDispatch();
   // console.log(setAllIssues(allIssues));
 
-  const [dragDrop, setDragDrop] = useState(allIssues);
-  const issueID = allIssues.map(iId => iId.id);
-  const dragId = dragDrop.map(iId => iId.id);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const sortedArr1 = issueID.slice().sort();
-    const sortedArr2 = dragId.slice().sort();
+  // const [dragDrop, setDragDrop] = useState(allIssues);
+  // const issueID = allIssues.map(iId => iId.id);
+  // const dragId = dragDrop.map(iId => iId.id);
 
-    if (!sortedArr1.every((value, index) => value === sortedArr2[index])) {
-      return setDragDrop(allIssues);
-    }
+  // useEffect(() => {
+  //   const sortedArr1 = issueID.slice().sort();
+  //   const sortedArr2 = dragId.slice().sort();
 
-    setDragDrop(dragDrop);
-  }, [allIssues, dragDrop, dragId, issueID]);
+  //   if (!sortedArr1.every((value, index) => value === sortedArr2[index])) {
+  //     return setDragDrop(allIssues);
+  //   }
+
+  //   setDragDrop(dragDrop);
+  // }, [allIssues, dragDrop, dragId, issueID]);
 
   const DroppableIssuesToDo = forwardRef((props, ref) => (
     <IssuesToDo {...props} forwardedRef={ref} />
@@ -44,7 +45,6 @@ export const ListIssues = () => {
   const handleDragEnd = result => {
     const { source, destination } = result;
 
-    // Перевірка, чи є призначення для перетягуваного елемента
     if (!destination) {
       return;
     }

@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import CardIssues from '../CardIssues/CardIssues';
 import css from './IssuesProgres.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllIssues, getProgressIssues } from '../../../redux/selectors';
+import { ProgressIssues } from '../../../redux/issuesReducer';
 
-export const IssuesProgres = ({ data }) => {
-  const [progress, setProgress] = useState([]);
-  //   const filterIssues = data.filter(d => d.assignee);
-  // console.log(progress.length);
-
+export const IssuesProgres = () => {
+  const allIssues = useSelector(getAllIssues);
+  const progressIssues = useSelector(getProgressIssues);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (!data) {
+    if (!allIssues) {
       return;
     }
-    const filterIssues = data.filter(d => d.assignee);
-    setProgress(filterIssues);
-  }, [data]);
+    const filterIssues = allIssues.filter(d => d.assignee);
+    dispatch(ProgressIssues(filterIssues));
+  }, [allIssues, dispatch]);
 
   return (
     <div className={css.containerToDo}>
       <h2 className={css.title}>In Progress</h2>
       <ul className={css.list}>
-        {data &&
-          progress.map((issue, index) => (
+        {allIssues &&
+          progressIssues.map((issue, index) => (
             <Draggable
               key={String(issue.id)}
               draggableId={String(issue.id)}
