@@ -4,4 +4,4 @@ export const getError = state => state.issues.issues.error;
 
 export const getUserRepo = state => state.issues.userRepo;
 export const getNextPage = state => state.issues.page;
-export const getProgressIssues = state => state.issues.progress;
+export const getColumns = state => state.issues.columns;

@@ -12,7 +12,7 @@ const issuesReducer = createSlice({
     },
     userRepo: [],
     page: 2,
-    progress: [],
+    columns: {},
   },
   reducers: {
     SearchRepo: (state, action) => {
@@ -24,8 +24,13 @@ const issuesReducer = createSlice({
     DragIssues: (state, action) => {
       state.issues.allIssues = action.payload;
     },
-    ProgressIssues: (state, action) => {
-      state.progress = action.payload;
+    updateColumns: (state, action) => {
+      // const values = Object.values(action.payload);
+      // const mapValues = values.map(v => v.items);
+
+      // state.issues.allIssues = mapValues[0];
+
+      state.columns = action.payload;
     },
   },
   extraReducers: {
@@ -44,13 +49,7 @@ const issuesReducer = createSlice({
   },
 });
 
-export const {
-  AddContact,
-  DeleteContact,
-  SearchRepo,
-  increment,
-  DragIssues,
-  ProgressIssues,
-} = issuesReducer.actions;
+export const { SearchRepo, increment, DragIssues, updateColumns } =
+  issuesReducer.actions;
 
 export default issuesReducer.reducer;

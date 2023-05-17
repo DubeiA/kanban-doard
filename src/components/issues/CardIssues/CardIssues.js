@@ -5,7 +5,6 @@ const moment = require('moment');
 
 function CardIssues({ data }) {
   const [createdDate, setCreatedDate] = useState();
-  //   console.log(createdDate);
 
   useEffect(() => {
     if (data.created_at) {

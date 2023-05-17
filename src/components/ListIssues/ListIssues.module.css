@@ -1,4 +1,24 @@
 .containerIssues {
   display: flex;
   justify-content: space-around;
+  height: 100%;
+}
+
+.containerFlex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btnLoad {
+  border-radius: 5px;
+  border-style: hidden;
+  background-color: greenyellow;
+  padding: 10px;
+
+  margin-left: 132px;
+}
+
+.btnLoad:hover {
+  background-color: cadetblue;
 }
