@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import { nanoid } from 'nanoid';
 import { fetchIssues } from './issuesOperation';
 
 const issuesReducer = createSlice({
@@ -12,7 +12,20 @@ const issuesReducer = createSlice({
     },
     userRepo: [],
     page: 2,
-    columns: {},
+    columns: {
+      [nanoid()]: {
+        name: 'To do',
+        items: [],
+      },
+      [nanoid()]: {
+        name: 'In Progress',
+        items: [],
+      },
+      [nanoid()]: {
+        name: 'Done',
+        items: [],
+      },
+    },
   },
   reducers: {
     SearchRepo: (state, action) => {
@@ -25,11 +38,6 @@ const issuesReducer = createSlice({
       state.issues.allIssues = action.payload;
     },
     updateColumns: (state, action) => {
-      // const values = Object.values(action.payload);
-      // const mapValues = values.map(v => v.items);
-
-      // state.issues.allIssues = mapValues[0];
-
       state.columns = action.payload;
     },
   },
@@ -39,6 +47,12 @@ const issuesReducer = createSlice({
       state.issues.isLoading = true;
     },
     [fetchIssues.fulfilled]: (state, { payload }) => {
+      const toDoColumnKey = Object.keys(state.columns).find(
+        key => state.columns[key].name === 'To do'
+      );
+      if (toDoColumnKey) {
+        state.columns[toDoColumnKey].items = payload;
+      }
       state.issues.allIssues = payload;
       state.issues.isLoading = false;
     },

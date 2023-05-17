@@ -76,7 +76,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { nanoid } from 'nanoid';
+
 import { IssuesToDo } from '../issues/IssuesToDo/IssuesToDo';
 
 import css from './ListIssues.module.css';
@@ -87,54 +87,41 @@ import { getAllIssues, getUserRepo, getColumns } from '../../redux/selectors';
 import { increment, updateColumns } from '../../redux/issuesReducer';
 
 export const ListIssues = () => {
-  const allIssues = useSelector(getAllIssues);
+  // const allIssues = useSelector(getAllIssues);
   const userURL = useSelector(getUserRepo);
   const column = useSelector(getColumns);
 
   const next = useSelector(state => state.issues.page);
 
-  console.log('allIssues', allIssues);
-
   const dispatch = useDispatch();
   const owner = userURL[0];
   const repo = userURL[1];
 
-  const [columns, setColumns] = useState(() => {
-    return {
-      [nanoid()]: {
-        name: 'To do',
-        items: allIssues,
-      },
-      [nanoid()]: {
-        name: 'In Progress',
-        items: [],
-      },
-      [nanoid()]: {
-        name: 'Done',
-        items: [],
-      },
-    };
-  });
+  console.log(column);
+
+  // const [columns, setColumns] = useState(() => {
+  //   return;
+  // });
 
   //
 
-  useEffect(() => {
-    setColumns(prevColumns => ({
-      ...prevColumns,
-      [Object.keys(prevColumns)[0]]: {
-        ...prevColumns[Object.keys(prevColumns)[0]],
-        items: allIssues,
-      },
-    }));
-  }, [allIssues]);
+  // useEffect(() => {
+  //   setColumns(prevColumns => ({
+  //     ...prevColumns,
+  //     [Object.keys(prevColumns)[0]]: {
+  //       ...prevColumns[Object.keys(prevColumns)[0]],
+  //       items: allIssues,
+  //     },
+  //   }));
+  // }, [allIssues]);
 
-  console.log('sdsd', allIssues);
+  // console.log('sdsd', allIssues);
   const fetchNextPage = () => {
     dispatch(increment());
     dispatch(fetchIssues({ owner, repo, next }));
   };
 
-  const onDragEnd = (result, column, setColumns) => {
+  const onDragEnd = (result, column) => {
     if (!result.destination) return;
     const { source, destination } = result;
 
@@ -149,42 +136,44 @@ export const ListIssues = () => {
 
       destItems.splice(destination.index, 0, removed);
 
-      setColumns({
-        ...column,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems,
-        },
-      });
+      dispatch(
+        updateColumns({
+          ...column,
+          [source.droppableId]: {
+            ...sourceColumn,
+            items: sourceItems,
+          },
+          [destination.droppableId]: {
+            ...destColumn,
+            items: destItems,
+          },
+        })
+      );
     } else {
       const columne = column[source.droppableId];
       const copiedItems = [...columne.items];
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
 
-      setColumns({
-        ...column,
-        [source.droppableId]: {
+      dispatch(
+        updateColumns({
           ...column,
-          items: copiedItems,
-        },
-      });
+          [source.droppableId]: {
+            ...column,
+            items: copiedItems,
+          },
+        })
+      );
     }
   };
 
-  useEffect(() => {
-    dispatch(updateColumns(columns));
-  }, [columns, dispatch]);
+  // useEffect(() => {
+  //   dispatch(updateColumns(columns));
+  // }, [columns, dispatch]);
 
   return (
     <div className={css.containerIssues}>
-      <DragDropContext
-        onDragEnd={result => onDragEnd(result, column, setColumns)}
-      >
+      <DragDropContext onDragEnd={result => onDragEnd(result, column)}>
         {Object.entries(column).map(([columnId, colum], index) => {
           return (
             <div className={css.containerFlex} key={columnId}>

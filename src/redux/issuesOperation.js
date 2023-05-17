@@ -16,7 +16,7 @@ export const fetchIssues = createAsyncThunk(
           owner,
           repo,
           page: next,
-          per_page: 5,
+          per_page: 20,
         }
       );
       console.log(response.data);
