@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import css from './auth.module.css';
 
 export const Auth = () => {
   const [rerender, setRerender] = useState(false);
@@ -36,8 +37,10 @@ export const Auth = () => {
 
   return (
     <div>
-      <div>
-        <button onClick={loginWithGitHub}>LogIn</button>
+      <div className={css.container}>
+        <button className={css.btnLogIn} onClick={loginWithGitHub}>
+          LogIn
+        </button>
         <h1>You have to Log In</h1>
       </div>
     </div>

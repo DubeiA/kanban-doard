@@ -34,9 +34,10 @@ const issuesReducer = createSlice({
     increment: (state, action) => {
       state.page += 1;
     },
-    DragIssues: (state, action) => {
-      state.issues.allIssues = action.payload;
+    decrement: (state, action) => {
+      state.page -= 1;
     },
+
     updateColumns: (state, action) => {
       state.columns = action.payload;
     },
@@ -45,6 +46,20 @@ const issuesReducer = createSlice({
     // Fecth issues
     [fetchIssues.pending]: state => {
       state.issues.isLoading = true;
+      state.columns = {
+        [nanoid()]: {
+          name: 'To do',
+          items: [],
+        },
+        [nanoid()]: {
+          name: 'In Progress',
+          items: [],
+        },
+        [nanoid()]: {
+          name: 'Done',
+          items: [],
+        },
+      };
     },
     [fetchIssues.fulfilled]: (state, { payload }) => {
       const toDoColumnKey = Object.keys(state.columns).find(
@@ -63,7 +78,7 @@ const issuesReducer = createSlice({
   },
 });
 
-export const { SearchRepo, increment, DragIssues, updateColumns } =
+export const { SearchRepo, increment, updateColumns, decrement } =
   issuesReducer.actions;
 
 export default issuesReducer.reducer;

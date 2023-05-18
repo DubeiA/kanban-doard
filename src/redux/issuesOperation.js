@@ -9,17 +9,15 @@ export const fetchIssues = createAsyncThunk(
   'issues/fetchAll',
   async ({ owner, repo, next = 1 }, { rejectWithValue }) => {
     try {
-      console.log(owner, repo, next);
       const response = await octokit.request(
         'GET /repos/{owner}/{repo}/issues',
         {
           owner,
           repo,
           page: next,
-          per_page: 20,
+          per_page: 10,
         }
       );
-      console.log(response.data);
 
       return response.data;
     } catch (error) {

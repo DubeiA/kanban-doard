@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Auth } from '../auth/auth';
-import css from './searchbar.module.css';
+import css from './mainPage.module.css';
 import Button from 'react-bootstrap/Button';
 import { fetchIssues } from '../../redux/issuesOperation';
-import { ListIssues } from '../ListIssues/ListIssues';
-import { getAllIssues, getUserRepo } from '../../redux/selectors';
+
+import { getUserRepo, getAllIssues } from '../../redux/selectors';
 import { SearchRepo } from '../../redux/issuesReducer';
+import { ListIssues } from '../ListIssues/ListIssues';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-export const SearchBar = () => {
+export const MainPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [rerender, setRerender] = useState(false);
 
-  const allIssues = useSelector(getAllIssues);
   const userURL = useSelector(getUserRepo);
+  const allIssues = useSelector(getAllIssues);
 
   const dispatch = useDispatch();
 
@@ -62,19 +63,18 @@ export const SearchBar = () => {
     alert('incorect url');
   };
 
+  const logOut = () => {
+    localStorage.removeItem('accessToken');
+    setRerender(!rerender);
+  };
+
   return (
     <>
       {localStorage.getItem('accessToken') ? (
         <>
-          <button
-            onClick={() => {
-              localStorage.removeItem('accessToken');
-              setRerender(!rerender);
-            }}
-          >
+          <button className={css.btnLogOut} onClick={logOut}>
             LogOut
           </button>
-          <p>https://github.com/facebook/react</p>
 
           <div className={css.searchContainer}>
             <input
@@ -96,6 +96,21 @@ export const SearchBar = () => {
               {isLoading ? 'Loading…' : 'Click to load'}
             </Button>
           </div>
+          {userURL[0] && userURL[1] && (
+            <div className={css.linksContainer}>
+              {' '}
+              <a className={css.link} href={`https://github.com/${userURL[0]}`}>
+                {userURL[0]} {'>'}
+              </a>
+              <a
+                className={css.link}
+                href={`https://github.com/${userURL[0]}/${userURL[1]}`}
+              >
+                {' '}
+                {userURL[1]}
+              </a>
+            </div>
+          )}
           {allIssues.length >= 1 && <ListIssues />}
         </>
       ) : (

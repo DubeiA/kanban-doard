@@ -1,11 +1,7 @@
-import { SearchBar } from './components/Searchbar/Searchbar';
+import { MainPage } from './components/MainPage/MainPage';
 
 function App() {
-  return (
-    <>
-      <SearchBar />
-    </>
-  );
+  return <MainPage />;
 }
 
 export default App;

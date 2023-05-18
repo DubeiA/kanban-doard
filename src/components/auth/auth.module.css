@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
+}
+
+.btnLogIn {
+  width: 150px;
+
+  border-radius: 5px;
+  border-style: hidden;
+  background-color: rgb(219, 222, 135);
+  padding: 10px;
+}

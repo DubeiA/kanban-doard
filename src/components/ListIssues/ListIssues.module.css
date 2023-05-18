@@ -22,3 +22,8 @@
 .btnLoad:hover {
   background-color: cadetblue;
 }
+
+.loader {
+  justify-content: center;
+  align-items: center;
+}
