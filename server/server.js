@@ -1,9 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const { CLIENT_ID, CLIENT_SECRET } = process.env;
 const dotenv = require('dotenv');
 dotenv.config();
-
-const { CLIENT_ID, CLIENT_SECRET } = process.env;
 
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
