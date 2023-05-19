@@ -1,16 +1,15 @@
+// import { CLIENT_ID, CLIENT_SECRET } from './config';
+const { CLIENT_ID, CLIENT_SECRET } = require('../config');
 const express = require('express');
 const cors = require('cors');
-const { CLIENT_ID, CLIENT_SECRET } = process.env;
-const dotenv = require('dotenv');
-dotenv.config();
+
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const bodyParser = require('body-parser');
-
-// const CLIENT_ID = '5b578c8c0d177a310fe7';
-// const CLIENT_SECRET = 'e25835cb31ca4f523f3ede15004a2494ae40c6d7';
 
 const app = express();
 
