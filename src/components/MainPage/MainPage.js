@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-// import { Auth } from '../auth/auth';
+
 import css from './mainPage.module.css';
 import Button from 'react-bootstrap/Button';
 import { fetchIssues } from '../../redux/issuesOperation';
@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 export const MainPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [rerender, setRerender] = useState(false);
 
   const userURL = useSelector(getUserRepo);
   const allIssues = useSelector(getAllIssues);
@@ -63,17 +62,8 @@ export const MainPage = () => {
     alert('incorect url');
   };
 
-  const logOut = () => {
-    localStorage.removeItem('accessToken');
-    setRerender(!rerender);
-  };
-
   return (
     <>
-      <button className={css.btnLogOut} onClick={logOut}>
-        LogOut
-      </button>
-
       <div className={css.searchContainer}>
         <input
           className={css.searchBar}
