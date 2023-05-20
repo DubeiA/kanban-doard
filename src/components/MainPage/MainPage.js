@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Auth } from '../auth/auth';
+// import { Auth } from '../auth/auth';
 import css from './mainPage.module.css';
 import Button from 'react-bootstrap/Button';
 import { fetchIssues } from '../../redux/issuesOperation';
@@ -70,52 +70,46 @@ export const MainPage = () => {
 
   return (
     <>
-      {localStorage.getItem('accessToken') ? (
-        <>
-          <button className={css.btnLogOut} onClick={logOut}>
-            LogOut
-          </button>
+      <button className={css.btnLogOut} onClick={logOut}>
+        LogOut
+      </button>
 
-          <div className={css.searchContainer}>
-            <input
-              className={css.searchBar}
-              type="text"
-              autoComplete="off"
-              autoFocus
-              placeholder="Search images and photos"
-              name="repo"
-              value={inputValue}
-              onChange={handleNameChange}
-            />
-            <Button
-              className={css.searchBtn}
-              variant="primary"
-              disabled={isLoading}
-              onClick={loadUrl}
-            >
-              {isLoading ? 'Loading…' : 'Click to load'}
-            </Button>
-          </div>
-          {userURL[0] && userURL[1] && (
-            <div className={css.linksContainer}>
-              {' '}
-              <a className={css.link} href={`https://github.com/${userURL[0]}`}>
-                {userURL[0]} {'>'}
-              </a>
-              <a
-                className={css.link}
-                href={`https://github.com/${userURL[0]}/${userURL[1]}`}
-              >
-                {' '}
-                {userURL[1]}
-              </a>
-            </div>
-          )}
-          {allIssues.length >= 1 && <ListIssues />}
-        </>
-      ) : (
-        <Auth />
+      <div className={css.searchContainer}>
+        <input
+          className={css.searchBar}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          name="repo"
+          value={inputValue}
+          onChange={handleNameChange}
+        />
+        <Button
+          className={css.searchBtn}
+          variant="primary"
+          disabled={isLoading}
+          onClick={loadUrl}
+        >
+          {isLoading ? 'Loading…' : 'Click to load'}
+        </Button>
+      </div>
+      {userURL[0] && userURL[1] && (
+        <div className={css.linksContainer}>
+          {' '}
+          <a className={css.link} href={`https://github.com/${userURL[0]}`}>
+            {userURL[0]} {'>'}
+          </a>
+          <a
+            className={css.link}
+            href={`https://github.com/${userURL[0]}/${userURL[1]}`}
+          >
+            {' '}
+            {userURL[1]}
+          </a>
+        </div>
       )}
+      {allIssues.length >= 1 && <ListIssues />}
     </>
   );
 };

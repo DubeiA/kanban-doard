@@ -1,8 +1,9 @@
 import { Octokit } from 'octokit';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+const { TOKEN } = require('../config');
 
 const octokit = new Octokit({
-  auth: localStorage.getItem('accessToken'),
+  TOKEN,
 });
 
 export const fetchIssues = createAsyncThunk(
