@@ -17,6 +17,8 @@ export const MainPage = () => {
   const userURL = useSelector(getUserRepo);
   const allIssues = useSelector(getAllIssues);
 
+  // console.log(allIssues);
+
   const dispatch = useDispatch();
 
   function simulateNetworkRequest() {
@@ -70,7 +72,7 @@ export const MainPage = () => {
           type="text"
           autoComplete="off"
           autoFocus
-          placeholder="Search images and photos"
+          placeholder="Paste url address repositories"
           name="repo"
           value={inputValue}
           onChange={handleNameChange}
