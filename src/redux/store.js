@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+// import { composeWithDevTools } from '@redux-devtools/extension';
 
 import {
   persistStore,
@@ -24,6 +25,7 @@ export const store = configureStore({
   reducer: {
     issues: persistedReducer,
   },
+
   middleware(getDefaultMiddleware) {
     return getDefaultMiddleware({
       serializableCheck: {

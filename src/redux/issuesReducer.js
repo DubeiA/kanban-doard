@@ -41,6 +41,12 @@ const issuesReducer = createSlice({
     updateColumns: (state, action) => {
       state.columns = action.payload;
     },
+    setData: (state, action) => {
+      state.issues = action.payload.issues;
+      state.userRepo = action.payload.userRepo;
+      state.page = action.payload.page;
+      state.columns = action.payload.columns;
+    },
   },
   extraReducers: {
     // Fecth issues
@@ -78,7 +84,7 @@ const issuesReducer = createSlice({
   },
 });
 
-export const { SearchRepo, increment, updateColumns, decrement } =
+export const { SearchRepo, increment, updateColumns, decrement, setData } =
   issuesReducer.actions;
 
 export default issuesReducer.reducer;

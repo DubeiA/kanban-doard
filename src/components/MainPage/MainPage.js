@@ -5,19 +5,24 @@ import Button from 'react-bootstrap/Button';
 import { fetchIssues } from '../../redux/issuesOperation';
 
 import { getUserRepo, getAllIssues } from '../../redux/selectors';
-import { SearchRepo } from '../../redux/issuesReducer';
+import { SearchRepo, setData } from '../../redux/issuesReducer';
 import { ListIssues } from '../ListIssues/ListIssues';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 export const MainPage = () => {
-  const [inputValue, setInputValue] = useState('');
+  // const [inputValue, setInputValue] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
+
+  const store = useSelector(store => store.issues);
 
   const userURL = useSelector(getUserRepo);
   const allIssues = useSelector(getAllIssues);
 
-  // console.log(allIssues);
+  useEffect(() => {
+    localStorage.setItem(`${userURL[0]} ${userURL[1]} `, JSON.stringify(store));
+  }, [store, userURL]);
 
   const dispatch = useDispatch();
 
@@ -34,34 +39,42 @@ export const MainPage = () => {
   }, [isLoading]);
 
   const handleNameChange = event => {
-    const regex = /https:\/\/github.com\/(.+)\/(.+)/;
-    const match = event.currentTarget.value.match(regex);
-    try {
-      const owner = match ? match[1] : null;
-      const repo = match ? match[2] : null;
-      const combintMatch = [owner, repo];
-
-      dispatch(SearchRepo(combintMatch));
-      setInputValue(event.currentTarget.value);
-    } catch (error) {
-      console.log(error);
-    }
+    setUrlInput(event.currentTarget.value);
   };
 
   const loadUrl = () => {
-    if (userURL) {
-      const owner = userURL[0];
-      const repo = userURL[1];
-      const page = 1;
-      dispatch(fetchIssues({ owner, repo, page }));
+    if (urlInput) {
+      const regex = /https:\/\/github.com\/(.+)\/(.+)/;
+      const match = urlInput.match(regex);
+      try {
+        const owner = match ? match[1] : null;
+        const repo = match ? match[2] : null;
+        const combintMatch = [owner, repo];
 
-      setLoading(true);
+        const localStorageData = localStorage.getItem(`${owner} ${repo} `);
 
-      setInputValue('');
+        dispatch(SearchRepo(combintMatch));
 
-      return;
+        setUrlInput(''); // Скидання значення інпуту
+
+        if (localStorageData !== null) {
+          const data = JSON.parse(localStorageData);
+
+          dispatch(setData(data));
+          setLoading(true);
+          return;
+        }
+        const page = 1;
+        dispatch(fetchIssues({ owner, repo, page }));
+
+        setLoading(true);
+
+        return;
+      } catch (error) {
+        console.log(error);
+      }
     }
-    alert('incorect url');
+    alert('Incorrect URL');
   };
 
   return (
@@ -74,7 +87,7 @@ export const MainPage = () => {
           autoFocus
           placeholder="Paste url address repositories"
           name="repo"
-          value={inputValue}
+          value={urlInput}
           onChange={handleNameChange}
         />
         <Button
