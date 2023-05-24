@@ -11,7 +11,6 @@ const issuesReducer = createSlice({
       error: null,
     },
     userRepo: [],
-    page: 2,
     columns: {
       [nanoid()]: {
         name: 'To do',
@@ -31,12 +30,6 @@ const issuesReducer = createSlice({
     SearchRepo: (state, action) => {
       state.userRepo = action.payload;
     },
-    increment: (state, action) => {
-      state.page += 1;
-    },
-    decrement: (state, action) => {
-      state.page -= 1;
-    },
 
     updateColumns: (state, action) => {
       state.columns = action.payload;
@@ -44,7 +37,6 @@ const issuesReducer = createSlice({
     setData: (state, action) => {
       state.issues = action.payload.issues;
       state.userRepo = action.payload.userRepo;
-      state.page = action.payload.page;
       state.columns = action.payload.columns;
     },
   },
@@ -84,7 +76,6 @@ const issuesReducer = createSlice({
   },
 });
 
-export const { SearchRepo, increment, updateColumns, decrement, setData } =
-  issuesReducer.actions;
+export const { SearchRepo, updateColumns, setData } = issuesReducer.actions;
 
 export default issuesReducer.reducer;

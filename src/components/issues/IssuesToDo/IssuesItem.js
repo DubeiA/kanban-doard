@@ -1,7 +1,7 @@
+import { Draggable } from 'react-beautiful-dnd';
+
 import CardIssues from '../CardIssues/CardIssues';
 import css from './IssuesToDo.module.css';
-
-import { Draggable } from 'react-beautiful-dnd';
 
 export const IssuesToDo = ({ column }) => {
   return (

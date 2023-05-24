@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import css from './mainPage.module.css';
-import Button from 'react-bootstrap/Button';
 import { fetchIssues } from '../../redux/issuesOperation';
-
 import { getUserRepo, getAllIssues } from '../../redux/selectors';
 import { SearchRepo, setData } from '../../redux/issuesReducer';
 import { ListIssues } from '../ListIssues/ListIssues';
 
-import { useDispatch, useSelector } from 'react-redux';
+import css from './mainPage.module.css';
+import Button from 'react-bootstrap/Button';
 
 export const MainPage = () => {
-  // const [inputValue, setInputValue] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [urlInput, setUrlInput] = useState('');
 

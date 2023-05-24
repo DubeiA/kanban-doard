@@ -1,15 +1,12 @@
+import { useSelector, useDispatch } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Audio } from 'react-loader-spinner';
 
 import { IssuesToDo } from '../issues/IssuesToDo/IssuesItem';
-
-import css from './ListIssues.module.css';
-
-import { useSelector, useDispatch } from 'react-redux';
-
 import { getColumns, getIsLoading } from '../../redux/selectors';
 import { updateColumns } from '../../redux/issuesReducer';
 
-import { Audio } from 'react-loader-spinner';
+import css from './ListIssues.module.css';
 
 export const ListIssues = () => {
   const column = useSelector(getColumns);

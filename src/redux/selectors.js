@@ -3,5 +3,4 @@ export const getIsLoading = state => state.issues.issues.isLoading;
 export const getError = state => state.issues.issues.error;
 
 export const getUserRepo = state => state.issues.userRepo;
-export const getNextPage = state => state.issues.page;
 export const getColumns = state => state.issues.columns;
